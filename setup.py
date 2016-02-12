@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-"""Installer for the collective.proxytype package."""
-
 from setuptools import find_packages
 from setuptools import setup
 
 
-long_description = "\n".join([
+version = "1.0a1"
+short_description = "Proxy for remote content"
+long_description = "\n\n".join([
     open('README.rst').read(),
     open('CHANGES.rst').read()
 ])
@@ -13,8 +13,8 @@ long_description = "\n".join([
 
 setup(
     name='collective.proxytype',
-    version='1.0a1',
-    description="Proxy for remote content",
+    version=version,
+    description=short_description,
     long_description=long_description,
     # Get more from https://pypi.python.org/pypi?%3Aaction=list_classifiers
     classifiers=[
@@ -39,7 +39,6 @@ setup(
     install_requires=[
         'plone.api',
         'setuptools',
-        'z3c.jbot',
         'plone.app.dexterity',
         'requests'
     ],
