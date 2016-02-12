@@ -6,7 +6,8 @@ from plone.app.portlets.portlets import base
 from plone.portlets.interfaces import IPortletDataProvider
 from zope import schema
 from zope.interface import implements
-from collective.proxytype.interfaces import IProxy
+from collective.proxytype.interfaces import IProxySchema
+
 
 PLONE5 = getFSVersionTuple()[0] >= 5
 
@@ -33,7 +34,7 @@ class IProxyBasePortlet(IPortletDataProvider):
     )
 
 
-class IProxyPortlet(IProxyBasePortlet, IProxy):
+class IProxyPortlet(IProxyBasePortlet, IProxySchema):
     """Full proxy portlet schema interface.
     IProxyBasePortlet as first item to get it's fields first.
     """

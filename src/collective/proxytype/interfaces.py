@@ -11,6 +11,13 @@ class IBrowserLayer(IDefaultBrowserLayer):
 
 
 class IProxy(Interface):
+    """Marker interface for Proxy types.
+    """
+
+
+class IProxySchema(Interface):
+    """Schema interface for the Proxy type and portlet.
+    """
 
     remote_url = schema.TextLine(
         title=_(u"Remote URL"),

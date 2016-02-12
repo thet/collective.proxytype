@@ -20,11 +20,11 @@
   </property>
   <property name="default_view_fallback">False</property>
   <property name="add_permission">cmf.AddPortalContent</property>
-  <property name="klass">plone.dexterity.content.Item</property>
+  <property name="klass">collective.proxytype.proxycontent.ProxyType</property>
   <property name="behaviors">
     <element value="plone.app.content.interfaces.INameFromTitle"/>
   </property>
-  <property name="schema">collective.proxytype.interfaces.IProxy</property>
+  <property name="schema">collective.proxytype.interfaces.IProxySchema</property>
   <property name="model_source"></property>
   <property name="model_file"></property>
   <alias from="(Default)" to="(dynamic view)"/>
