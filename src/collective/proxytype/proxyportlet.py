@@ -1,4 +1,5 @@
-from . import msgFact as _
+# -*- coding: utf-8 -*-
+from . import _
 from .proxy import get_content
 from Products.CMFPlone.utils import getFSVersionTuple
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
@@ -45,17 +46,14 @@ class Assignment(base.Assignment):
 
     header = u""
     remote_url = None
-    url_replacement_map = None
 
     def __init__(
         self,
         header=u"",
-        remote_url=None,
-        url_replacement_map=None
+        remote_url=None
     ):
         self.header = header
         self.remote_url = remote_url
-        self.url_replacement_map = url_replacement_map
 
     @property
     def title(self):
@@ -73,7 +71,7 @@ class Renderer(base.Renderer):
         return True
 
     def get_content(self):
-        return get_content(self.data.remote_url, self.data.url_replacement_map)
+        return get_content(self.data.remote_url)
 
     def update(self):
         pass
