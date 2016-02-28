@@ -10,9 +10,8 @@
   <property name="link_target"></property>
   <property name="immediate_view">proxyview</property>
   <property name="global_allow">True</property>
-  <property name="filter_content_types">True</property>
-  <property name="allowed_content_types">
-  </property>
+  <property name="filter_content_types">False</property>
+  <property name="allowed_content_types"/>
   <property name="allow_discussion">False</property>
   <property name="default_view">proxyview</property>
   <property name="view_methods">
@@ -20,9 +19,13 @@
   </property>
   <property name="default_view_fallback">False</property>
   <property name="add_permission">cmf.AddPortalContent</property>
-  <property name="klass">collective.proxytype.proxycontent.ProxyType</property>
+  <property name="klass">collective.proxytype.proxytype.ProxyType</property>
   <property name="behaviors">
+    <element value="plone.app.dexterity.behaviors.metadata.IDublinCore"/>
     <element value="plone.app.content.interfaces.INameFromTitle"/>
+    <element value="plone.app.dexterity.behaviors.discussion.IAllowDiscussion"/>
+    <element value="plone.app.dexterity.behaviors.exclfromnav.IExcludeFromNavigation"/>
+    <element value="plone.app.relationfield.behavior.IRelatedItems"/>
   </property>
   <property name="schema">collective.proxytype.interfaces.IProxySchema</property>
   <property name="model_source"></property>

@@ -7,7 +7,7 @@ from plone.dexterity.interfaces import IDexterityFTI
 from plone import api
 
 from collective.proxytype.testing import COLLECTIVE_PROXYTYPE_INTEGRATION_TESTING  # noqa
-from collective.proxytype.interfaces import IProxy
+from collective.proxytype.interfaces import IProxyType
 
 import unittest2 as unittest
 
@@ -25,7 +25,7 @@ class ProxyIntegrationTest(unittest.TestCase):
     def test_schema(self):
         fti = queryUtility(IDexterityFTI, name='Proxy')
         schema = fti.lookupSchema()
-        self.assertEqual(IProxy, schema)
+        self.assertEqual(IProxyType, schema)
 
     def test_fti(self):
         fti = queryUtility(IDexterityFTI, name='Proxy')
@@ -35,10 +35,10 @@ class ProxyIntegrationTest(unittest.TestCase):
         fti = queryUtility(IDexterityFTI, name='Proxy')
         factory = fti.factory
         obj = createObject(factory)
-        self.assertTrue(IProxy.providedBy(obj))
+        self.assertTrue(IProxyType.providedBy(obj))
 
     def test_adding(self):
         self.portal.invokeFactory('Proxy', 'Proxy')
         self.assertTrue(
-            IProxy.providedBy(self.portal['Proxy'])
+            IProxyType.providedBy(self.portal['Proxy'])
         )
