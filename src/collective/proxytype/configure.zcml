@@ -14,7 +14,7 @@
       for       ="plone.dexterity.interfaces.IDexterityContainer"
       class     =".proxyview.ProxyView"
       template  ="proxyview.pt"
-      layer     =".interfaces.IThemeSpecific"
+      layer     =".interfaces.IBrowserLayer"
       permission="zope2.View"
       menu      ="plone_displayviews"
       title     ="Proxy View"
@@ -22,7 +22,7 @@
 
   <plone:portlet
       name      ="collective.proxytype.proxyportlet"
-      interface =".proxyportlet.IProxyType"
+      interface =".proxyportlet.IProxyPortlet"
       assignment=".proxyportlet.Assignment"
       renderer  =".proxyportlet.Renderer"
       addview   =".proxyportlet.AddForm"
