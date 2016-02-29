@@ -2,6 +2,7 @@
 """Module where all interfaces, events and exceptions live."""
 
 from collective.proxytype import _
+from plone.dexterity.interfaces import IDexterityContainer
 from zope import schema
 from zope.interface import Interface
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
@@ -11,7 +12,7 @@ class IBrowserLayer(IDefaultBrowserLayer):
     """Marker interface that defines a browser layer."""
 
 
-class IProxyType(Interface):
+class IProxyType(IDexterityContainer):
     """Marker interface for Proxy types.
     """
 

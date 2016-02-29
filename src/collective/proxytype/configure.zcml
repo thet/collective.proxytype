@@ -11,7 +11,7 @@
 
   <browser:page
       name      ="proxyview"
-      for       ="plone.dexterity.interfaces.IDexterityContainer"
+      for       =".interfaces.IProxyType"
       class     =".proxyview.ProxyView"
       template  ="proxyview.pt"
       layer     =".interfaces.IBrowserLayer"

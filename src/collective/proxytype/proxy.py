@@ -3,6 +3,7 @@ from .interfaces import IProxyType
 import plone.api.portal
 import requests
 import lxml
+from urlparse import urljoin
 
 
 def get_content(remote_url):
@@ -24,7 +25,10 @@ def get_content(remote_url):
 
     # Create a list of remote_url, absolute_url tuples for the replacement
     repl_map = [
-        (it.getObject().remote_url, it.getObject().absolute_url())
+        (
+            it.getObject().remote_url,
+            urljoin(it.getObject().absolute_url(), '@@proxyview')
+        )
         for it in res
     ]
     # Reverse that list, so that longest remote_url paths are first.
