@@ -4,6 +4,8 @@ import plone.api.portal
 import requests
 import lxml
 
+import re
+
 
 def get_content(remote_url):
     """Get remote html content.
@@ -26,7 +28,8 @@ def get_content(remote_url):
     repl_map = [
         (
             it.getObject().remote_url,
-            u'/'.join([it.getObject().absolute_url(), '@@proxyview'])
+            u'/'.join([it.getObject().absolute_url(), '@@proxyview']),
+            it.getObject().exclude_urls
         )
         for it in res
     ]
@@ -38,7 +41,11 @@ def get_content(remote_url):
     )
 
     # Now, for all IProxyType, replace their remote_url with their absolute_url
-    for key_remote_url, val_absolute_url in repl_map:
-        ret = ret.replace(key_remote_url, val_absolute_url)
+    for remote_url_, absolute_url_, exclude_urls_ in repl_map:
+        rec = re.compile('(?!({0})){1}'.format(
+            '|'.join(exclude_urls_ or ()),
+            remote_url_
+        ))
+        ret = rec.sub(absolute_url_, ret)
 
     return ret

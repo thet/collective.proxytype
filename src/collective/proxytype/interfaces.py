@@ -32,3 +32,20 @@ class IProxySchema(Interface):
         ),
         required=True,
     )
+
+    exclude_urls = schema.Tuple(
+        title=_(
+            u'label_exclude_urls',
+            default=u'Exclude URLs'
+        ),
+        description=_(
+            u'help_exclude_urls',
+            default=u'List of URLs to exclude from replacement - e.g. static '
+                    u'resources, which should be loaded directly. '
+                    u'One URL per line.'
+        ),
+        value_type=schema.TextLine(),
+        required=False,
+        missing_value=(),
+        default=()
+    )
