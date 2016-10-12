@@ -38,9 +38,10 @@ setup(
     zip_safe=False,
     install_requires=[
         'plone.api',
-        'setuptools',
+        'plone.app.contentmenu',
         'plone.app.dexterity',
-        'requests'
+        'requests',
+        'setuptools',
     ],
     extras_require={
         'test': [

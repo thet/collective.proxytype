@@ -1,23 +1,40 @@
 # -*- coding: utf-8 -*-
 from .proxy import get_content
 from Products.Five.browser import BrowserView
+from urllib import urlencode
 from zope.interface import implementer
 from zope.publisher.interfaces import IPublishTraverse
+
+import urlparse
+
 # TODO: caching
 
 
 @implementer(IPublishTraverse)
 class ProxyView(BrowserView):
-    subpath = []
 
     def get_content(self):
         url = self.context.remote_url
-        if self.subpath:
-            url = '/'.join([url.rstrip('/')] + self.subpath)
+
+        # url_parts[2] .. path
+        # url_parts[4] .. query string
+        url_parts = list(urlparse.urlparse(url))
+
+        # Update path
+        subpath = getattr(self, 'subpath', [])
+        if subpath:
+            url_parts[2] = '/'.join([url_parts[2].rstrip('/')] + subpath)
+
+        # Update query string
+        query = dict(urlparse.parse_qsl(url_parts[4]))
+        query.update(self.request.form)
+        url_parts[4] = urlencode(query)
+
+        url = urlparse.urlunparse(url_parts)
+
         # TODO:
         # - on non-HTML content (JS/CSS/IMGS), don't use template
         # - on HTML content, onle inject body in template
-        # - make sure, request params are also used
         return get_content(url)
 
     # Traverser
@@ -25,5 +42,7 @@ class ProxyView(BrowserView):
     def publishTraverse(self, request, name):
         """Subpath traverser
         """
+        if getattr(self, 'subpath', None) is None:
+            self.subpath = []
         self.subpath.append(name)
         return self
