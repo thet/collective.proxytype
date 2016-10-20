@@ -7,7 +7,13 @@ import lxml
 import re
 
 
-def get_content(remote_url):
+def get_content(
+    remote_url,
+    content_selector=None,
+    append_script=False,
+    append_style=False,
+    append_link=False
+):
     """Get remote html content.
     """
 
@@ -17,7 +23,23 @@ def get_content(remote_url):
     # Replace all relative URLs to absolute ones.
     tree = lxml.html.fromstring(ret)
     tree.make_links_absolute(remote_url)
-    ret = lxml.html.tostring(tree)
+
+    c_tree = tree.cssselect(content_selector) if content_selector else [tree]
+
+    append = []
+    if append_script:
+        append += tree.cssselect('html head script')
+    if append_style:
+        append += tree.cssselect('html head style')
+    if append_link:
+        append += tree.cssselect('html head link')
+
+    for el in append:
+        # Append to last selected element
+        c_tree[-1].append(el)
+
+    # serialize all selected elements in order from the content tree
+    ret = u'\n'.join([lxml.html.tostring(el) for el in c_tree])
 
     cat = plone.api.portal.get_tool('portal_catalog')
     res = cat.searchResults(

@@ -34,8 +34,13 @@ class ProxyView(BrowserView):
 
         # TODO:
         # - on non-HTML content (JS/CSS/IMGS), don't use template
-        # - on HTML content, onle inject body in template
-        return get_content(url)
+        return get_content(
+            url,
+            getattr(self.context, 'content_selector', None),
+            getattr(self.context, 'append_script', None),
+            getattr(self.context, 'append_link', None),
+            getattr(self.context, 'append_style', None)
+        )
 
     # Traverser
 
