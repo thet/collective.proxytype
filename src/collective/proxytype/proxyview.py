@@ -1,19 +1,29 @@
 # -*- coding: utf-8 -*-
 from .proxy import get_content
 from Products.Five.browser import BrowserView
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from urllib import urlencode
 from zope.interface import implementer
 from zope.publisher.interfaces import IPublishTraverse
 
 import urlparse
 
-# TODO: caching
-
 
 @implementer(IPublishTraverse)
 class ProxyView(BrowserView):
 
-    def get_content(self):
+    content = None
+
+    def publishTraverse(self, request, name):
+        """Subpath traverser
+        """
+        if getattr(self, 'subpath', None) is None:
+            self.subpath = []
+        self.subpath.append(name)
+        return self
+
+    def __call__(self):
+
         url = self.context.remote_url
 
         # url_parts[2] .. path
@@ -32,17 +42,17 @@ class ProxyView(BrowserView):
 
         url = urlparse.urlunparse(url_parts)
 
-        # TODO:
-        # - on non-HTML content (JS/CSS/IMGS), don't use template
-        # - on HTML content, onle inject body in template
-        return get_content(url)
+        self.content, content_type = get_content(
+            url,
+            getattr(self.context, 'content_selector', None),
+            getattr(self.context, 'append_script', False),
+            getattr(self.context, 'append_link', False),
+            getattr(self.context, 'append_style', False),
+            getattr(self.context, 'cache_time', 3600)
+        )
 
-    # Traverser
+        if 'text/html' not in content_type:
+            self.request.response.setHeader('Content-type', content_type)
+            return self.content
 
-    def publishTraverse(self, request, name):
-        """Subpath traverser
-        """
-        if getattr(self, 'subpath', None) is None:
-            self.subpath = []
-        self.subpath.append(name)
-        return self
+        return ViewPageTemplateFile('proxyview.pt')(self)

@@ -71,7 +71,8 @@ class Renderer(base.Renderer):
         return True
 
     def get_content(self):
-        return get_content(self.data.remote_url)
+        content, content_type = get_content(self.data.remote_url)
+        return content
 
     def update(self):
         pass

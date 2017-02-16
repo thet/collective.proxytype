@@ -14,7 +14,6 @@
       name      ="proxyview"
       for       =".interfaces.IProxyType"
       class     =".proxyview.ProxyView"
-      template  ="proxyview.pt"
       layer     =".interfaces.IBrowserLayer"
       permission="zope2.View"
       menu      ="plone_displayviews"
