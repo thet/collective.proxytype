@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 from .interfaces import IProxyType
-import plone.api.portal
-import requests
-import lxml
+from bs4 import UnicodeDammit
+from lxml.html.clean import clean_html
 
+import lxml
+import plone.api.portal
 import re
+import requests
 
 
 def get_content(
@@ -25,10 +27,13 @@ def get_content(
         return (res.content, content_type)
 
     # CASE HTML
-    ret = res.text
+
+    # Cleanup...?
+    # response = UnicodeDammit(res.text).unicode_markup
+    # text = clean_html(res.text)
 
     # Replace all relative URLs to absolute ones.
-    tree = lxml.html.fromstring(ret)
+    tree = lxml.html.fromstring(res.text)
     tree.make_links_absolute(remote_url)
 
     c_tree = tree.cssselect(content_selector) if content_selector else [tree]
@@ -46,7 +51,10 @@ def get_content(
         c_tree[-1].append(el)
 
     # serialize all selected elements in order from the content tree
-    ret = u'\n'.join([lxml.html.tostring(el) for el in c_tree])
+    ret = u'\n'.join([
+        lxml.html.tostring(el, encoding='unicode')
+        for el in c_tree
+    ])
 
     cat = plone.api.portal.get_tool('portal_catalog')
     res = cat.searchResults(
