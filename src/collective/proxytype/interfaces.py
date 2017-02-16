@@ -101,3 +101,16 @@ class IProxySchema(Interface):
         required=False,
         default=False,
     )
+
+    cache_time = schema.TextLine(
+        title=_(
+            "label_cache_time",
+            default=u"Cache Time"
+        ),
+        description=_(
+            "help_cache_time",
+            default=u"Time to cache the remote content in seconds. Empty or 0 for no caching."  # noqa
+        ),
+        required=False,
+        default=u"3600",
+    )
