@@ -9,9 +9,6 @@ from zope.publisher.interfaces import IPublishTraverse
 import urlparse
 
 
-# TODO: caching
-
-
 @implementer(IPublishTraverse)
 class ProxyView(BrowserView):
 
@@ -48,9 +45,10 @@ class ProxyView(BrowserView):
         self.content, content_type = get_content(
             url,
             getattr(self.context, 'content_selector', None),
-            getattr(self.context, 'append_script', None),
-            getattr(self.context, 'append_link', None),
-            getattr(self.context, 'append_style', None)
+            getattr(self.context, 'append_script', False),
+            getattr(self.context, 'append_link', False),
+            getattr(self.context, 'append_style', False),
+            getattr(self.context, 'cache_time', 3600)
         )
 
         if 'text/html' not in content_type:

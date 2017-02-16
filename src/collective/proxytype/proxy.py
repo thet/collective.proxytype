@@ -2,6 +2,9 @@
 from .interfaces import IProxyType
 from bs4 import UnicodeDammit
 from lxml.html.clean import clean_html
+from plone.memoize import ram
+from plone.memoize.volatile import DontCache
+from time import time
 
 import lxml
 import plone.api.portal
@@ -9,15 +12,44 @@ import re
 import requests
 
 
+def _results_cachekey(
+    method,
+    remote_url,
+    content_selector=None,
+    append_script=False,
+    append_style=False,
+    append_link=False,
+    cache_time=3600
+):
+    cache_time = int(cache_time)
+    if not cache_time:
+        # Don't cache on cache_time = 0 or any other falsy value
+        raise DontCache
+    timeout = time() // int(cache_time)
+    cachekey = (
+        remote_url,
+        content_selector,
+        append_script,
+        append_style,
+        append_link,
+        timeout
+    )
+    return cachekey
+
+
+@ram.cache(_results_cachekey)
 def get_content(
     remote_url,
     content_selector=None,
     append_script=False,
     append_style=False,
-    append_link=False
+    append_link=False,
+    cache_time=3600
 ):
     """Get remote html content.
     """
+
+    print("CACHE MISS")
 
     res = requests.get(remote_url)
 
