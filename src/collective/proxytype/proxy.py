@@ -18,6 +18,13 @@ def get_content(
     """
 
     res = requests.get(remote_url)
+
+    content_type = res.headers['Content-Type']
+    if 'text/html' not in content_type:
+        # CASE NON-HTML CONTENT (IMAGES/JAVASCRIPT/CSS/WHATEVER)
+        return (res.content, content_type)
+
+    # CASE HTML
     ret = res.text
 
     # Replace all relative URLs to absolute ones.
@@ -70,4 +77,9 @@ def get_content(
         ))
         ret = rec.sub(absolute_url_, ret)
 
-    return ret
+        # Replace double-googles within the @@proxyview path.
+        # Traversing to those doesn't work.
+        rec = re.compile('(?!(\/@@proxyview))\/@@')
+        ret = rec.sub('', ret)
+
+    return (ret, content_type)
